@@ -1,0 +1,139 @@
+<!-- FILE: index.html -->
+<!-- PURPOSE: Single Page Application frontend connecting to Supabase Data API with CRUD (Read & Create) capabilities -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Web App - Supabase Post Integration</title>
+  <!-- Load Supabase Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; line-height: 1.6; }
+    form { background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 30px; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; font-weight: bold; margin-bottom: 5px; }
+    input[type="text"], textarea { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+    button { background: #0070f3; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+    button:hover { background: #0051a2; }
+    .post-card { border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
+    .post-card h3 { margin: 0 0 5px 0; color: #333; }
+    .post-card p { margin: 0; color: #666; }
+    #status-msg { margin-top: 10px; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <h1>Create New Post</h1>
+  
+  <!-- Form for Submitting New Data -->
+  <form id="create-post-form">
+    <div class="form-group">
+      <label for="post-title">Title</label>
+      <input type="text" id="post-title" required placeholder="Enter post title...">
+    </div>
+    <div class="form-group">
+      <label for="post-content">Content</label>
+      <textarea id="post-content" rows="4" required placeholder="Write post content..."></textarea>
+    </div>
+    <button type="submit" id="submit-btn">Publish Post</button>
+    <div id="status-msg"></div>
+  </form>
+
+  <h2>Posts Feed</h2>
+  <div id="posts">Loading...</div>
+
+  <script>
+    // Exact Supabase Credentials
+    const SUPABASE_URL = 'https://yxhxrlmydbiblpninatx.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_bp2Xrh7oGCwC55rj2JTGxQ_LmlAiabw';
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const postsContainer = document.getElementById('posts');
+    const createForm = document.getElementById('create-post-form');
+    const statusMsg = document.getElementById('status-msg');
+
+    // 1. Function to Fetch and Render Posts
+    async function fetchPosts() {
+      const { data, error } = await supabaseClient
+        .from('posts')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        postsContainer.innerHTML = '<strong>Database Error:</strong> ' + error.message;
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        postsContainer.innerHTML = 'Connected successfully! No posts found in database yet.';
+        return;
+      }
+
+      postsContainer.innerHTML = data
+        .map(post => `
+          <div class="post-card">
+            <h3>${escapeHtml(post.title)}</h3>
+            <p>${escapeHtml(post.content)}</p>
+          </div>
+        `)
+        .join('');
+    }
+
+    // 2. Function to Handle Form Submission (Insert Data)
+    createForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const titleInput = document.getElementById('post-title');
+      const contentInput = document.getElementById('post-content');
+      
+      statusMsg.style.color = '#333';
+      statusMsg.textContent = 'Publishing...';
+
+      // Insert new row into public.posts table
+      const { data, error } = await supabaseClient
+        .from('posts')
+        .insert([
+          {
+            title: titleInput.value.trim(),
+            content: contentInput.value.trim()
+          }
+        ]);
+
+      if (error) {
+        statusMsg.style.color = 'red';
+        statusMsg.textContent = 'Failed to create post: ' + error.message;
+        return;
+      }
+
+      statusMsg.style.color = 'green';
+      statusMsg.textContent = 'Post published successfully!';
+
+      // Clear input fields
+      titleInput.value = '';
+      contentInput.value = '';
+
+      // Reload posts feed to display new post immediately
+      fetchPosts();
+    });
+
+    // Helper to sanitize text output (XSS protection)
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>"']/g, function(m) {
+        return {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#039;'
+        }[m];
+      });
+    }
+
+    // Initial load on page view
+    fetchPosts();
+  </script>
+</body>
+</html>
