@@ -1,56 +1,178 @@
-<!-- 1. Biblioteka Supabase z CDN -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<!-- 2. Formularz HTML -->
-<form id="contactForm" style="max-width: 500px; display: flex; flex-direction: column; gap: 10px;">
-  <input type="text" id="name" placeholder="Twoje imię" required />
-  <input type="email" id="email" placeholder="Twój e-mail" required />
-  <input type="text" id="subject" placeholder="Temat wiadomości" required />
-  <textarea id="message" placeholder="Treść wiadomości" rows="5" required></textarea>
-  
-  <button type="submit" id="submitBtn">Wyślij wiadomość</button>
-  <p id="formStatus"></p>
-</form>
-
-<!-- 3. Skrypt obsługujący wysyłkę -->
-<script>
-  const SUPABASE_URL = 'https://yxhxrlmydbiblpninatx.supabase.co';
-  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4aHhybG15ZGJpYmxwbmluYXR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyNTA1NDMsImV4cCI6MjEwMjgyNjU0M30.dYsY5vvY5w73Q7Nl2NbGgXioz_rDdByoXJ3UB0vpYrg'; // <-- Wklej tu swój anon key
-
-  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  const form = document.getElementById('contactForm');
-  const statusText = document.getElementById('formStatus');
-  const submitBtn = document.getElementById('submitBtn');
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    submitBtn.disabled = true;
-    statusText.style.color = 'black';
-    statusText.innerText = 'Wysyłanie...';
-
-    const payload = {
-      name: document.getElementById('name').value,
-      email: document.getElementById('email').value,
-      subject: document.getElementById('subject').value,
-      message: document.getElementById('message').value
-    };
-
-    const { data, error } = await supabaseClient
-      .from('contact_messages')
-      .insert([payload]);
-
-    if (error) {
-      console.error('Błąd Supabase:', error);
-      statusText.style.color = 'red';
-      statusText.innerText = 'Błąd podczas wysyłania wiadomości. Spróbuj ponownie.';
-    } else {
-      statusText.style.color = 'green';
-      statusText.innerText = 'Wiadomość została pomyślnie wysłana!';
-      form.reset();
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechM8 - Contact & Portfolio</title>
+  <!-- CDN Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
+    body {
+      background-color: #0f172a;
+      color: #f8fafc;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      width: 100%;
+      max-width: 650px;
+      background: #1e293b;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      border: 1px solid #334155;
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      color: #38bdf8;
+    }
+    p.subtitle {
+      color: #94a3b8;
+      margin-bottom: 25px;
+      font-size: 0.95rem;
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-row {
+      display: flex;
+      gap: 15px;
+    }
+    .form-row .form-group {
+      flex: 1;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.85rem;
+      color: #cbd5e1;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      color: #f8fafc;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus, textarea:focus {
+      border-color: #38bdf8;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #0284c7;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #0369a1;
+    }
+    button:disabled {
+      background: #475569;
+      cursor: not-allowed;
+    }
+    #formStatus {
+      margin-top: 15px;
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 500;
+      min-height: 20px;
+    }
+  </style>
+</head>
+<body>
 
-    submitBtn.disabled = false;
-  });
-</script>
+  <div class="container">
+    <h1>TechM8 Console</h1>
+    <p class="subtitle">Masz pytanie lub propozycję współpracy? Wyślij wiadomość.</p>
+
+    <form id="contactForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">Imię / Nazwisko / Firma</label>
+          <input type="text" id="name" placeholder="np. Jan Kowalski" required>
+        </div>
+        <div class="form-group">
+          <label for="email">E-mail kontaktowy</label>
+          <input type="email" id="email" placeholder="jan@example.com" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="subject">Temat wiadomości</label>
+        <input type="text" id="subject" placeholder="Określ temat zlecenia lub pytania" required>
+      </div>
+
+      <div class="form-group">
+        <label for="message">Treść wiadomości</label>
+        <textarea id="message" rows="5" placeholder="Wpisz tutaj szczegóły wiadomości..." required></textarea>
+      </div>
+
+      <button type="submit" id="submitBtn">Wyślij wiadomość</button>
+      <p id="formStatus"></p>
+    </form>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://yxhxrlmydbiblpninatx.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4aHhybG15ZGJpYmxwbmluYXR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyNTA1NDMsImV4cCI6MjEwMjgyNjU0M30.dYsY5vvY5w73Q7Nl2NbGgXioz_rDdByoXJ3UB0vpYrg'; // <-- Wklej swój pełny klucz anon (JWT)
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const form = document.getElementById('contactForm');
+    const statusText = document.getElementById('formStatus');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      submitBtn.disabled = true;
+      statusText.style.color = '#94a3b8';
+      statusText.innerText = 'Wysyłanie...';
+
+      const payload = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        subject: document.getElementById('subject').value,
+        message: document.getElementById('message').value
+      };
+
+      const { data, error } = await supabaseClient
+        .from('contact_messages')
+        .insert([payload]);
+
+      if (error) {
+        console.error('Błąd Supabase:', error);
+        statusText.style.color = '#f87171';
+        statusText.innerText = 'Błąd podczas wysyłania wiadomości. Spróbuj ponownie.';
+      } else {
+        statusText.style.color = '#4ade80';
+        statusText.innerText = 'Wiadomość została pomyślnie wysłana!';
+        form.reset();
+      }
+
+      submitBtn.disabled = false;
+    });
+  </script>
+
+</body>
+</html>
