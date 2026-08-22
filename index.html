@@ -134,46 +134,88 @@
   </div>
 
   <script>
-    const SUPABASE_URL = 'https://yxhxrlmydbiblpninatx.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4aHhybG15ZGJpYmxwbmluYXR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyNTA1NDMsImV4cCI6MjEwMjgyNjU0M30.dYsY5vvY5w73Q7Nl2NbGgXioz_rDdByoXJ3UB0vpYrg'; // <-- Wklej swój pełny klucz anon (JWT)
+  const SUPABASE_URL = 'https://yxhxrlmydbiblpninatx.supabase.co';
+  const SUPABASE_ANON_KEY = 'TWOJ_KLUCZ_eyJ...'; // <-- Wklej swój pełny klucz anon (JWT)
 
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const form = document.getElementById('contactForm');
-    const statusText = document.getElementById('formStatus');
-    const submitBtn = document.getElementById('submitBtn');
+  const form = document.getElementById('contactForm');
+  const statusText = document.getElementById('formStatus');
+  const submitBtn = document.getElementById('submitBtn');
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      submitBtn.disabled = true;
-      statusText.style.color = '#94a3b8';
-      statusText.innerText = 'Wysyłanie...';
+  const COOLDOWN_TIME_MS = 2 * 60 * 1000; // 2 minuty blokady po wysłaniu
 
-      const payload = {
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        subject: document.getElementById('subject').value,
-        message: document.getElementById('message').value
-      };
-
-      const { data, error } = await supabaseClient
-        .from('contact_messages')
-        .insert([payload]);
-
-      if (error) {
-        console.error('Błąd Supabase:', error);
-        statusText.style.color = '#f87171';
-        statusText.innerText = 'Błąd podczas wysyłania wiadomości. Spróbuj ponownie.';
-      } else {
-        statusText.style.color = '#4ade80';
-        statusText.innerText = 'Wiadomość została pomyślnie wysłana!';
-        form.reset();
+  // Funkcja sprawdzająca czy użytkownik jest w trakcie odliczania
+  function checkCooldown() {
+    const lastSent = localStorage.getItem('last_contact_email_sent');
+    if (lastSent) {
+      const timePassed = Date.now() - parseInt(lastSent, 10);
+      if (timePassed < COOLDOWN_TIME_MS) {
+        const remainingSeconds = Math.ceil((COOLDOWN_TIME_MS - timePassed) / 1000);
+        submitBtn.disabled = true;
+        statusText.style.color = '#94a3b8';
+        statusText.innerText = `Wiadomość wysłana. Kolejną możesz wysłać za ${remainingSeconds}s.`;
+        return true;
       }
+    }
+    return false;
+  }
 
+  // Uruchomienie sprawdzania na starcie
+  if (checkCooldown()) {
+    const timer = setInterval(() => {
+      if (!checkCooldown()) {
+        clearInterval(timer);
+        submitBtn.disabled = false;
+        statusText.innerText = '';
+      }
+    }, 1000);
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (checkCooldown()) return;
+    
+    submitBtn.disabled = true;
+    statusText.style.color = '#94a3b8';
+    statusText.innerText = 'Wysyłanie...';
+
+    const payload = {
+      name: document.getElementById('name').value,
+      email: document.getElementById('email').value,
+      subject: document.getElementById('subject').value,
+      message: document.getElementById('message').value
+    };
+
+    const { data, error } = await supabaseClient
+      .from('contact_messages')
+      .insert([payload]);
+
+    if (error) {
+      console.error('Błąd Supabase:', error);
+      statusText.style.color = '#f87171';
+      statusText.innerText = 'Błąd podczas wysyłania wiadomości. Spróbuj ponownie.';
       submitBtn.disabled = false;
-    });
-  </script>
+    } else {
+      // Zapisujemy czas wysyłki do localStorage
+      localStorage.setItem('last_contact_email_sent', Date.now().toString());
+      
+      statusText.style.color = '#4ade80';
+      statusText.innerText = 'Wiadomość została pomyślnie wysłana!';
+      form.reset();
+
+      // Włączamy odliczanie w czasie rzeczywistym
+      const timer = setInterval(() => {
+        if (!checkCooldown()) {
+          clearInterval(timer);
+          submitBtn.disabled = false;
+          statusText.innerText = '';
+        }
+      }, 1000);
+    }
+  });
+</script>
 
 </body>
 </html>
