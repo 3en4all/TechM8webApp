@@ -3,87 +3,160 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TechM8 - Hybrid Homelab & IT Solutions</title>
+  <title>TechM8 Console</title>
   <link rel="icon" href="data:,">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
-      --bg: #0b0f17;
-      --card-bg: #151c28;
-      --border: #222d3d;
-      --text: #e2e8f0;
-      --text-muted: #94a3b8;
+      --bg: #090d16;
+      --card-bg: #111827;
+      --card-border: #1f2937;
+      --input-bg: #0b101b;
+      --input-border: #1f2937;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
       --accent: #10b981;
       --accent-hover: #059669;
+      --tag-bg: #0f172a;
+      --tag-border: #1e293b;
+      --tag-text: #0284c7;
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       background-color: var(--bg);
       color: var(--text);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      line-height: 1.6;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.5;
       padding: 40px 20px;
     }
+
     .main-container {
-      max-width: 900px;
+      max-width: 800px;
       margin: 0 auto;
     }
+
     header {
-      margin-bottom: 40px;
+      margin-bottom: 25px;
     }
-    h1 { font-size: 2.2rem; color: #fff; margin-bottom: 10px; }
-    p.lead { color: var(--text-muted); font-size: 1.1rem; }
-    
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    p.lead {
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+
     .card {
       background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
       padding: 24px;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
-    .card h2 { font-size: 1.4rem; color: #fff; margin-bottom: 12px; }
-    .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 15px; }
+
+    .card h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 12px;
+    }
+
+    .card p.desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 16px;
+    }
+
+    .tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
     .tag {
-      background: #1e293b;
-      border: 1px solid #334155;
-      color: #38bdf8;
+      background: var(--tag-bg);
+      border: 1px solid var(--tag-border);
+      color: var(--tag-text);
       padding: 4px 10px;
-      border-radius: 6px;
+      border-radius: 4px;
       font-size: 0.85rem;
     }
 
     /* Formularz */
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
-    @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
-    
-    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 15px; }
-    label { font-size: 0.85rem; color: var(--text-muted); }
+    .form-row {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    @media (max-width: 600px) {
+      .form-row { flex-direction: column; gap: 15px; }
+    }
+
+    .form-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 15px;
+    }
+
+    label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
     input, textarea {
-      background: #0b0f17;
-      border: 1px solid var(--border);
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
       border-radius: 8px;
       padding: 12px;
-      color: #fff;
+      color: var(--text);
       font-size: 0.95rem;
       outline: none;
+      font-family: inherit;
     }
-    input:focus, textarea:focus { border-color: var(--accent); }
-    
+
+    input:focus, textarea:focus {
+      border-color: #374151;
+    }
+
     button {
       background: var(--accent);
-      color: #fff;
+      color: #ffffff;
       border: none;
-      padding: 14px;
+      padding: 12px;
       border-radius: 8px;
       font-weight: 600;
+      font-size: 1rem;
       cursor: pointer;
       width: 100%;
-      font-size: 1rem;
+      margin-top: 5px;
       transition: background 0.2s;
     }
-    button:hover { background: var(--accent-hover); }
-    button:disabled { background: #334155; cursor: not-allowed; }
-    #formStatus { text-align: center; margin-top: 10px; font-size: 0.9rem; min-height: 20px; }
+
+    button:hover {
+      background: var(--accent-hover);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    #formStatus {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 0.9rem;
+      min-height: 20px;
+    }
   </style>
 </head>
 <body>
@@ -94,10 +167,10 @@
       <p class="lead">Projektowanie sieci, automatyzacja IT oraz środowiska Hybrid Homelab.</p>
     </header>
 
-    <!-- Sekcja Homelab -->
+    <!-- Sekcja Hybrid Homelab -->
     <div class="card">
       <h2>Hybrid Homelab</h2>
-      <p>Środowisko sieciowo-serwerowe oparte o Proxmox VE, konteneryzację Docker, zabezpieczona tunelami WireGuard z zewnętrznym VPS i automatyzacją routingu (OpenWrt na Raspberry Pi).</p>
+      <p class="desc">Środowisko sieciowo-serwerowe oparte o Proxmox VE, konteneryzację Docker, zabezpieczona tunelami WireGuard z zewnętrznym VPS i automatyzacją routingu (OpenWrt na Raspberry Pi).</p>
       <div class="tags">
         <span class="tag">Proxmox VE</span>
         <span class="tag">WireGuard</span>
@@ -110,10 +183,10 @@
     <!-- Sekcja Kontakt -->
     <div class="card">
       <h2>Kontakt</h2>
-      <p style="color: var(--text-muted); margin-bottom: 20px;">Planujesz współpracę lub rekrutację? Napisz wiadomość.</p>
-      
+      <p class="desc">Planujesz współpracę lub rekrutację? Napisz wiadomość.</p>
+
       <form id="contactForm">
-        <div class="form-grid">
+        <div class="form-row">
           <div class="form-group">
             <label for="name">Imię / Nazwisko / Firma</label>
             <input type="text" id="name" placeholder="Jacek" required>
@@ -131,7 +204,7 @@
 
         <div class="form-group">
           <label for="message">Treść wiadomości</label>
-          <textarea id="message" rows="5" placeholder="Treść wiadomości..." required></textarea>
+          <textarea id="message" rows="4" placeholder="Treść wiadomości..." required></textarea>
         </div>
 
         <button type="submit" id="submitBtn">Wyślij wiadomość</button>
@@ -142,7 +215,7 @@
 
   <script>
     const SUPABASE_URL = 'https://yxhxrlmydbiblpninatx.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4aHhybG15ZGJpYmxwbmluYXR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyNTA1NDMsImV4cCI6MjEwMjgyNjU0M30.dYsY5vvY5w73Q7Nl2NbGgXioz_rDdByoXJ3UB0vpYrg'; // <-- Pamiętaj o wklejeniu swojego pełnego klucza anon (JWT)
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4aHhybG15ZGJpYmxwbmluYXR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyNTA1NDMsImV4cCI6MjEwMjgyNjU0M30.dYsY5vvY5w73Q7Nl2NbGgXioz_rDdByoXJ3UB0vpYrg'; // <-- Wklej tutaj swój pełny klucz anon (JWT)
 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -152,7 +225,7 @@
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+
       submitBtn.disabled = true;
       statusText.style.color = 'var(--text-muted)';
       statusText.innerText = 'Wysyłanie...';
