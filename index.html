@@ -74,6 +74,16 @@
       margin-bottom: 16px;
     }
 
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 650px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
     .tags {
       display: flex;
       gap: 8px;
@@ -157,6 +167,13 @@
       font-size: 0.9rem;
       min-height: 20px;
     }
+
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
   </style>
 </head>
 <body>
@@ -177,6 +194,44 @@
         <span class="tag">Docker</span>
         <span class="tag">Raspberry Pi</span>
         <span class="tag">Python</span>
+      </div>
+    </div>
+
+    <!-- Siatka dwóch kart: Network & Stack -->
+    <div class="grid-2">
+      <div class="card">
+        <h2>Network & Infrastructure</h2>
+        <p class="desc">Zarządzanie infrastrukturą sieciową, segmentacja VLAN, reguły firewall, lokalny filtr DNS Pi-hole oraz redundantne zasilanie UPS z auto-shutdownem.</p>
+        <div class="tags">
+          <span class="tag">OpenWrt</span>
+          <span class="tag">Pi-hole</span>
+          <span class="tag">VLAN</span>
+          <span class="tag">Cisco SG350</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Core Stack</h2>
+        <p class="desc">Narzędzia wykorzystywane w codziennej automatyzacji, budowie rozwiązań backendowych oraz integracjach API.</p>
+        <div class="tags">
+          <span class="tag">Python 3</span>
+          <span class="tag">Supabase</span>
+          <span class="tag">PostgreSQL</span>
+          <span class="tag">REST API</span>
+          <span class="tag">Git</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sekcja Projektów -->
+    <div class="card">
+      <h2>System Projects</h2>
+      <p class="desc">Autorskie narzędzia oraz integracje bezserwerowe (m.in. ProjectFreedom, wyzwalacze SQL w PostgreSQL z edgami Deno/Supabase, skrypty orkiestracji w Pythonie).</p>
+      <div class="tags">
+        <span class="tag">ProjectFreedom</span>
+        <span class="tag">Edge Functions</span>
+        <span class="tag">Automation</span>
+        <span class="tag">Resend API</span>
       </div>
     </div>
 
@@ -211,11 +266,15 @@
         <p id="formStatus"></p>
       </form>
     </div>
+
+    <footer>
+      <p>&copy; TechM8 Console. Wszelkie prawa zastrzeżone.</p>
+    </footer>
   </div>
 
   <script>
     const SUPABASE_URL = 'https://yxhxrlmydbiblpninatx.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4aHhybG15ZGJpYmxwbmluYXR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyNTA1NDMsImV4cCI6MjEwMjgyNjU0M30.dYsY5vvY5w73Q7Nl2NbGgXioz_rDdByoXJ3UB0vpYrg'; // <-- Wklej tutaj swój pełny klucz anon (JWT)
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4aHhybG15ZGJpYmxwbmluYXR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyNTA1NDMsImV4cCI6MjEwMjgyNjU0M30.dYsY5vvY5w73Q7Nl2NbGgXioz_rDdByoXJ3UB0vpYrg'; // <-- Wklej tu swój klucz anon (JWT)
 
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
