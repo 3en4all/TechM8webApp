@@ -48,9 +48,9 @@
 
         <!-- CTA Buttons -->
         <div class="flex flex-wrap gap-4 pt-2">
-          <a href="#telemetry" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold rounded-lg transition-colors flex items-center gap-2 text-sm">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-            Zobacz Live Telemetrię
+          <a href="#contact" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold rounded-lg transition-colors flex items-center gap-2 text-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            Nawiąż kontakt
           </a>
           <a href="#projects" class="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium rounded-lg border border-brand-border transition-colors text-sm">
             Projekty & Homelab
@@ -277,7 +277,103 @@
       </div>
     </section>
 
+    <!-- 4. CONTACT SECTION -->
+    <section id="contact" class="space-y-6 pt-4">
+      <div class="border-b border-brand-border pb-4">
+        <h2 class="text-2xl font-bold text-white">Kontakt & Współpraca</h2>
+        <p class="text-slate-400 text-sm">Masz pytania dotyczące projektu, chcesz omówić współpracę lub rekrutację? Napisz wiadomość.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Left Column: Quick Contact Info & Channels -->
+        <div class="lg:col-span-5 space-y-6">
+          <div class="bg-brand-card border border-brand-border rounded-xl p-6 space-y-6">
+            <h3 class="text-lg font-bold text-white">Kanały bezpośrednie</h3>
+            
+            <div class="space-y-4 text-sm">
+              <!-- Location Info -->
+              <div class="flex items-start gap-3">
+                <div class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 mt-0.5">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                </div>
+                <div>
+                  <span class="block text-slate-400 text-xs uppercase font-mono">Lokalizacja</span>
+                  <span class="text-slate-200 font-medium">Ksawerów / Łódź (Praca zdalna / hybryda)</span>
+                </div>
+              </div>
+
+              <!-- Work Models -->
+              <div class="flex items-start gap-3">
+                <div class="p-2 rounded-lg bg-blue-500/10 text-blue-400 mt-0.5">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                </div>
+                <div>
+                  <span class="block text-slate-400 text-xs uppercase font-mono">Formy współpracy</span>
+                  <span class="text-slate-200 font-medium">UoP / B2B (Dostępność: od zaraz)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Action Buttons -->
+            <div class="pt-4 border-t border-slate-700/50 space-y-3">
+              <a href="https://github.com/3en4all" target="_blank" rel="noopener noreferrer" class="w-full px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium rounded-lg border border-brand-border transition-colors flex items-center justify-center gap-2 text-sm">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                Profil GitHub (3en4all)
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Interactive Form -->
+        <div class="lg:col-span-7">
+          <form onsubmit="event.preventDefault(); alert('Wiadomość przygotowana do wysyłki.');" class="bg-brand-card border border-brand-border rounded-xl p-6 space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="name" class="block text-xs font-mono text-slate-400 mb-1">Imię / Nazwisko / Firma</label>
+                <input type="text" id="name" required placeholder="np. Jan Kowalski" class="w-full bg-slate-900 border border-brand-border rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition-colors">
+              </div>
+              <div>
+                <label for="email" class="block text-xs font-mono text-slate-400 mb-1">Email kontaktowy</label>
+                <input type="email" id="email" required placeholder="jan@example.com" class="w-full bg-slate-900 border border-brand-border rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition-colors">
+              </div>
+            </div>
+
+            <div>
+              <label for="subject" class="block text-xs font-mono text-slate-400 mb-1">Temat</label>
+              <input type="text" id="subject" placeholder="Oferta pracy / Zapytanie o projekt" class="w-full bg-slate-900 border border-brand-border rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition-colors">
+            </div>
+
+            <div>
+              <label for="message" class="block text-xs font-mono text-slate-400 mb-1">Treść wiadomości</label>
+              <textarea id="message" rows="4" required placeholder="Opisz krótko swój temat..." class="w-full bg-slate-900 border border-brand-border rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-emerald-500 transition-colors resize-none"></textarea>
+            </div>
+
+            <button type="submit" class="w-full px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold rounded-lg transition-colors text-sm flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+              Wyślij wiadomość
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </section>
+
   </div> <!-- End Main Container -->
+
+  <!-- 5. FOOTER -->
+  <footer class="border-t border-brand-border bg-slate-950 mt-16 py-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4 font-mono text-xs text-slate-500">
+      <div class="flex items-center gap-3">
+        <span class="text-emerald-400 font-bold">TechM8</span>
+        <span>&bull;</span>
+        <span>ProjectFreedom Platform</span>
+      </div>
+      <div>
+        <span>&copy; 2026 Jacek Grodnicki. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
 
 </body>
 </html>
