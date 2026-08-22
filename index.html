@@ -3,219 +3,184 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TechM8 - Contact & Portfolio</title>
-  <!-- CDN Supabase JS SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <title>TechM8 - Hybrid Homelab & IT Solutions</title>
   <link rel="icon" href="data:,">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    :root {
+      --bg: #0b0f17;
+      --card-bg: #151c28;
+      --border: #222d3d;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --accent: #10b981;
+      --accent-hover: #059669;
     }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background-color: #0f172a;
-      color: #f8fafc;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 20px;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      padding: 40px 20px;
     }
-    .container {
-      width: 100%;
-      max-width: 650px;
-      background: #1e293b;
-      padding: 30px;
+    .main-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    header {
+      margin-bottom: 40px;
+    }
+    h1 { font-size: 2.2rem; color: #fff; margin-bottom: 10px; }
+    p.lead { color: var(--text-muted); font-size: 1.1rem; }
+    
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
       border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-      border: 1px solid #334155;
+      padding: 24px;
+      margin-bottom: 30px;
     }
-    h1 {
-      font-size: 1.8rem;
-      margin-bottom: 8px;
+    .card h2 { font-size: 1.4rem; color: #fff; margin-bottom: 12px; }
+    .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 15px; }
+    .tag {
+      background: #1e293b;
+      border: 1px solid #334155;
       color: #38bdf8;
-    }
-    p.subtitle {
-      color: #94a3b8;
-      margin-bottom: 25px;
-      font-size: 0.95rem;
-    }
-    .form-group {
-      margin-bottom: 18px;
-    }
-    .form-row {
-      display: flex;
-      gap: 15px;
-    }
-    .form-row .form-group {
-      flex: 1;
-    }
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 0.85rem;
-      color: #cbd5e1;
-    }
-    input, textarea {
-      width: 100%;
-      padding: 12px;
-      background: #0f172a;
-      border: 1px solid #334155;
+      padding: 4px 10px;
       border-radius: 6px;
-      color: #f8fafc;
+      font-size: 0.85rem;
+    }
+
+    /* Formularz */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+    @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+    
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 15px; }
+    label { font-size: 0.85rem; color: var(--text-muted); }
+    input, textarea {
+      background: #0b0f17;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      color: #fff;
       font-size: 0.95rem;
       outline: none;
-      transition: border-color 0.2s;
     }
-    input:focus, textarea:focus {
-      border-color: #38bdf8;
-    }
+    input:focus, textarea:focus { border-color: var(--accent); }
+    
     button {
-      width: 100%;
-      padding: 14px;
-      background: #0284c7;
+      background: var(--accent);
       color: #fff;
       border: none;
-      border-radius: 6px;
+      padding: 14px;
+      border-radius: 8px;
       font-weight: 600;
-      font-size: 1rem;
       cursor: pointer;
+      width: 100%;
+      font-size: 1rem;
       transition: background 0.2s;
     }
-    button:hover {
-      background: #0369a1;
-    }
-    button:disabled {
-      background: #475569;
-      cursor: not-allowed;
-    }
-    #formStatus {
-      margin-top: 15px;
-      text-align: center;
-      font-size: 0.9rem;
-      font-weight: 500;
-      min-height: 20px;
-    }
+    button:hover { background: var(--accent-hover); }
+    button:disabled { background: #334155; cursor: not-allowed; }
+    #formStatus { text-align: center; margin-top: 10px; font-size: 0.9rem; min-height: 20px; }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>TechM8 Console</h1>
-    <p class="subtitle">Masz pytanie lub propozycję współpracy? Wyślij wiadomość.</p>
+  <div class="main-container">
+    <header>
+      <h1>TechM8 Console</h1>
+      <p class="lead">Projektowanie sieci, automatyzacja IT oraz środowiska Hybrid Homelab.</p>
+    </header>
 
-    <form id="contactForm">
-      <div class="form-row">
-        <div class="form-group">
-          <label for="name">Imię / Nazwisko / Firma</label>
-          <input type="text" id="name" placeholder="np. Jan Kowalski" required>
+    <!-- Sekcja Homelab -->
+    <div class="card">
+      <h2>Hybrid Homelab</h2>
+      <p>Środowisko sieciowo-serwerowe oparte o Proxmox VE, konteneryzację Docker, zabezpieczona tunelami WireGuard z zewnętrznym VPS i automatyzacją routingu (OpenWrt na Raspberry Pi).</p>
+      <div class="tags">
+        <span class="tag">Proxmox VE</span>
+        <span class="tag">WireGuard</span>
+        <span class="tag">Docker</span>
+        <span class="tag">Raspberry Pi</span>
+        <span class="tag">Python</span>
+      </div>
+    </div>
+
+    <!-- Sekcja Kontakt -->
+    <div class="card">
+      <h2>Kontakt</h2>
+      <p style="color: var(--text-muted); margin-bottom: 20px;">Planujesz współpracę lub rekrutację? Napisz wiadomość.</p>
+      
+      <form id="contactForm">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="name">Imię / Nazwisko / Firma</label>
+            <input type="text" id="name" placeholder="Jacek" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email kontaktowy</label>
+            <input type="email" id="email" placeholder="jackerjacks@gmail.com" required>
+          </div>
         </div>
+
         <div class="form-group">
-          <label for="email">E-mail kontaktowy</label>
-          <input type="email" id="email" placeholder="jan@example.com" required>
+          <label for="subject">Temat</label>
+          <input type="text" id="subject" placeholder="Temat wiadomości" required>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label for="subject">Temat wiadomości</label>
-        <input type="text" id="subject" placeholder="Określ temat zlecenia lub pytania" required>
-      </div>
+        <div class="form-group">
+          <label for="message">Treść wiadomości</label>
+          <textarea id="message" rows="5" placeholder="Treść wiadomości..." required></textarea>
+        </div>
 
-      <div class="form-group">
-        <label for="message">Treść wiadomości</label>
-        <textarea id="message" rows="5" placeholder="Wpisz tutaj szczegóły wiadomości..." required></textarea>
-      </div>
-
-      <button type="submit" id="submitBtn">Wyślij wiadomość</button>
-      <p id="formStatus"></p>
-    </form>
+        <button type="submit" id="submitBtn">Wyślij wiadomość</button>
+        <p id="formStatus"></p>
+      </form>
+    </div>
   </div>
 
   <script>
-  const SUPABASE_URL = 'https://yxhxrlmydbiblpninatx.supabase.co';
-  const SUPABASE_ANON_KEY = 'TWOJ_KLUCZ_eyJ...'; // <-- Wklej swój pełny klucz anon (JWT)
+    const SUPABASE_URL = 'https://yxhxrlmydbiblpninatx.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4aHhybG15ZGJpYmxwbmluYXR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyNTA1NDMsImV4cCI6MjEwMjgyNjU0M30.dYsY5vvY5w73Q7Nl2NbGgXioz_rDdByoXJ3UB0vpYrg'; // <-- Pamiętaj o wklejeniu swojego pełnego klucza anon (JWT)
 
-  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const form = document.getElementById('contactForm');
-  const statusText = document.getElementById('formStatus');
-  const submitBtn = document.getElementById('submitBtn');
+    const form = document.getElementById('contactForm');
+    const statusText = document.getElementById('formStatus');
+    const submitBtn = document.getElementById('submitBtn');
 
-  const COOLDOWN_TIME_MS = 2 * 60 * 1000; // 2 minuty blokady po wysłaniu
-
-  // Funkcja sprawdzająca czy użytkownik jest w trakcie odliczania
-  function checkCooldown() {
-    const lastSent = localStorage.getItem('last_contact_email_sent');
-    if (lastSent) {
-      const timePassed = Date.now() - parseInt(lastSent, 10);
-      if (timePassed < COOLDOWN_TIME_MS) {
-        const remainingSeconds = Math.ceil((COOLDOWN_TIME_MS - timePassed) / 1000);
-        submitBtn.disabled = true;
-        statusText.style.color = '#94a3b8';
-        statusText.innerText = `Wiadomość wysłana. Kolejną możesz wysłać za ${remainingSeconds}s.`;
-        return true;
-      }
-    }
-    return false;
-  }
-
-  // Uruchomienie sprawdzania na starcie
-  if (checkCooldown()) {
-    const timer = setInterval(() => {
-      if (!checkCooldown()) {
-        clearInterval(timer);
-        submitBtn.disabled = false;
-        statusText.innerText = '';
-      }
-    }, 1000);
-  }
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    if (checkCooldown()) return;
-    
-    submitBtn.disabled = true;
-    statusText.style.color = '#94a3b8';
-    statusText.innerText = 'Wysyłanie...';
-
-    const payload = {
-      name: document.getElementById('name').value,
-      email: document.getElementById('email').value,
-      subject: document.getElementById('subject').value,
-      message: document.getElementById('message').value
-    };
-
-    const { data, error } = await supabaseClient
-      .from('contact_messages')
-      .insert([payload]);
-
-    if (error) {
-      console.error('Błąd Supabase:', error);
-      statusText.style.color = '#f87171';
-      statusText.innerText = 'Błąd podczas wysyłania wiadomości. Spróbuj ponownie.';
-      submitBtn.disabled = false;
-    } else {
-      // Zapisujemy czas wysyłki do localStorage
-      localStorage.setItem('last_contact_email_sent', Date.now().toString());
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
       
-      statusText.style.color = '#4ade80';
-      statusText.innerText = 'Wiadomość została pomyślnie wysłana!';
-      form.reset();
+      submitBtn.disabled = true;
+      statusText.style.color = 'var(--text-muted)';
+      statusText.innerText = 'Wysyłanie...';
 
-      // Włączamy odliczanie w czasie rzeczywistym
-      const timer = setInterval(() => {
-        if (!checkCooldown()) {
-          clearInterval(timer);
-          submitBtn.disabled = false;
-          statusText.innerText = '';
-        }
-      }, 1000);
-    }
-  });
-</script>
+      const payload = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        subject: document.getElementById('subject').value,
+        message: document.getElementById('message').value
+      };
+
+      const { data, error } = await supabaseClient
+        .from('contact_messages')
+        .insert([payload]);
+
+      if (error) {
+        console.error('Błąd Supabase:', error);
+        statusText.style.color = '#ef4444';
+        statusText.innerText = 'Błąd podczas wysyłania. Spróbuj ponownie.';
+        submitBtn.disabled = false;
+      } else {
+        statusText.style.color = 'var(--accent)';
+        statusText.innerText = 'Wiadomość została pomyślnie wysłana!';
+        form.reset();
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
 
 </body>
 </html>
