@@ -374,6 +374,67 @@
       </div>
     </div>
   </footer>
+	<!-- Biblioteka Supabase JS via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+  // Konfiguracja połączenia
+  const SUPABASE_URL = 'HTTPS://TWOJ-PROJEKT.supabase.co';
+  const SUPABASE_ANON_KEY = 'TWOJ_KLUCZ_ANON_PUBLICZNY';
+
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // Podpięcie pod zdarzenie submita
+  document.addEventListener('DOMContentLoaded', () => {
+    const contactForm = document.querySelector('#contact form');
+
+    if (contactForm) {
+      // Usuwamy atrybut onsubmit z HTML, jeśli tam był
+      contactForm.removeAttribute('onsubmit');
+
+      contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
+
+        // Pobranie wartości z pól
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const subject = document.getElementById('subject').value.trim();
+        const message = document.getElementById('message').value.trim();
+
+        // Stan ładowania
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `
+          <svg class="animate-spin w-4 h-4 text-slate-950" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          Wysyłanie...
+        `;
+
+        try {
+          const { data, error } = await supabaseClient
+            .from('contact_messages')
+            .insert([{ name, email, subject, message }]);
+
+          if (error) throw error;
+
+          // Sukces
+          alert('Dziękuję! Wiadomość została zapisana w bazie Supabase.');
+          contactForm.reset();
+        } catch (err) {
+          console.error('Supabase Error:', err.message);
+          alert('Błąd podczas wysyłania wiadomości: ' + err.message);
+        } finally {
+          // Przywrócenie przycisku
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnText;
+        }
+      });
+    }
+  });
+</script>
 </body>
 </html>
